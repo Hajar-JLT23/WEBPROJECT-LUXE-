@@ -1,13 +1,12 @@
 <?php
-// Démarrer la session pour gérer le panier
+//demarrer la session pour gérer le panier//
 session_start();
 
-// Initialiser le panier s'il n'existe pas
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
-// Compter le nombre d'articles dans le panier
+
 $nombre_articles = 0;
 foreach ($_SESSION['panier'] as $quantite) {
     $nombre_articles += $quantite;
@@ -15,8 +14,8 @@ foreach ($_SESSION['panier'] as $quantite) {
 
 // Connexion à la base de données
 $servername = "localhost";
-$username = "root"; // Généralement "root" en local
-$password = "123ML@#jklhhh"; // Mot de passe vide par défaut pour XAMPP
+$username = "root"; 
+$password = "" //ici faut mette son Mot de passe , puisque c'est un repostory public on a décidé de pas mettre notre mot de passe SQL vsible//
 $dbname = "hacha_luxury";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -24,17 +23,15 @@ if ($conn->connect_error) {
     die("Connexion échouée: " . $conn->connect_error);
 }
 
-// Récupérer le genre depuis l'URL si présent
+
 $genre_filter = isset($_GET['genre']) ? $_GET['genre'] : '';
 
-// Récupérer la catégorie depuis l'URL si présente
 $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : '';
 
-// Récupérer le tri depuis l'URL
+
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'nom_asc';
 
-// Définir l'ordre de tri
-$order_by = "nom ASC"; // Par défaut
+$order_by = "nom ASC"; 
 if ($sort == 'prix_asc') {
     $order_by = "prix ASC";
 } elseif ($sort == 'prix_desc') {
@@ -43,7 +40,7 @@ if ($sort == 'prix_asc') {
     $order_by = "nom DESC";
 }
 
-// Construire la requête SQL avec filtres
+
 $sql = "SELECT p.*, c.nom as categorie_nom FROM produits p 
         LEFT JOIN categories c ON p.categorie_id = c.id 
         WHERE 1=1";
@@ -67,7 +64,6 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Récupérer toutes les catégories pour le filtre
 $sql_categories = "SELECT * FROM categories ORDER BY nom";
 $result_categories = $conn->query($sql_categories);
 $categories = [];
@@ -78,24 +74,21 @@ if ($result_categories->num_rows > 0) {
     }
 }
 
-// Traitement de l'ajout au panier
 if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
     $produit_id = $_POST['produit_id'];
     $quantite = 1;
     
-    // Ajouter ou incrémenter la quantité dans le panier
     if (isset($_SESSION['panier'][$produit_id])) {
         $_SESSION['panier'][$produit_id] += $quantite;
     } else {
         $_SESSION['panier'][$produit_id] = $quantite;
     }
     
-    // Rediriger pour éviter la soumission multiple du formulaire
+ 
     header("Location: produits.php" . (empty($_SERVER['QUERY_STRING']) ? "" : "?" . $_SERVER['QUERY_STRING']));
     exit();
 }
 
-// Titre de la page en fonction du filtre
 $page_title = "Tous nos parfums";
 if (!empty($genre_filter)) {
     $page_title = "Parfums " . ucfirst($genre_filter);
@@ -109,26 +102,25 @@ if (!empty($genre_filter)) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo $page_title; ?> - HACHA LUXURY SCENT</title>
   
-  <!-- Polices Google - Playfair pour l'élégance des titres et Poppins pour la lisibilité -->
+ 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Bootstrap CSS -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
-  <!-- FontAwesome Icons -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
-  <!-- AOS Animation Library -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
-      /* Variables de couleurs - harmonisées avec la page À propos */
+      
       :root {
-          --primary: #1b2845; /* bleu nuit profond */
-          --secondary: #c9b037; /* or ancien */
-          --accent: #ffd700; /* or brillant pour les accents */
-          --dark-bg: #0a0a0a; /* presque noir pour le fond */
-          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); /* dégradé doré inspiré des reflets de lumière */
+          --primary: #1b2845; 
+          --secondary: #c9b037; 
+          --accent: #ffd700; 
+          --dark-bg: #0a0a0a; 
+          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); 
       }
 
       body {
@@ -159,7 +151,6 @@ if (!empty($genre_filter)) {
           animation: fadeIn 1s ease-out;
       }
 
-      /* Navbar - avec effet de verre comme sur la page À propos */
       .navbar {
           background: rgba(10, 10, 10, 0.8) !important;
           backdrop-filter: blur(10px);
@@ -204,7 +195,7 @@ if (!empty($genre_filter)) {
           transform: translateY(-2px);
       }
 
-      /* Page header */
+    
       .page-header {
           background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
                       url('https://images.unsplash.com/photo-1596203721435-99e556d3fbb2?ixlib=rb-4.0.3') no-repeat center center;
@@ -237,7 +228,7 @@ if (!empty($genre_filter)) {
           display: inline-block;
       }
 
-      /* Filtres */
+     
       .filters {
           background: rgba(10, 10, 10, 0.7);
           padding: 20px;
@@ -271,13 +262,13 @@ if (!empty($genre_filter)) {
           color: white;
       }
 
-      /* Product Cards - redesign pour un look plus luxueux */
+
       .products {
           position: relative;
           padding: 50px 0;
       }
 
-      /* Motif marocain subtil en arrière-plan */
+
       .products::before {
           content: '';
           position: absolute;
@@ -321,7 +312,7 @@ if (!empty($genre_filter)) {
           transform: scale(1.05);
       }
 
-      /* Effet de brillance qui passe sur l'image */
+
       .product-card::before {
           content: '';
           position: absolute;
@@ -357,7 +348,7 @@ if (!empty($genre_filter)) {
           color: #ddd !important;
       }
 
-      /* Boutons */
+     
       .btn-primary {
           background: var(--gold-gradient);
           border: none;
@@ -388,7 +379,7 @@ if (!empty($genre_filter)) {
           box-shadow: 0 10px 20px rgba(201, 176, 55, 0.4);
       }
 
-      /* Badge de genre */
+      
       .genre-badge {
           position: absolute;
           top: 10px;
@@ -415,7 +406,7 @@ if (!empty($genre_filter)) {
           color: white;
       }
 
-      /* Footer */
+     
       footer {
           background: var(--dark-bg);
           padding: 60px 0 30px;
@@ -453,7 +444,7 @@ if (!empty($genre_filter)) {
           text-decoration: none;
       }
 
-      /* Social Icons */
+
       .social-links a {
           display: inline-block;
           width: 40px;
@@ -473,14 +464,14 @@ if (!empty($genre_filter)) {
           transform: translateY(-5px);
       }
 
-      /* Copyright */
+     
       .copyright {
           margin-top: 40px;
           padding-top: 20px;
           border-top: 1px solid rgba(255,255,255,0.1);
       }
 
-      /* Scroll to top button */
+      
       .scroll-top {
           position: fixed;
           bottom: 30px;
@@ -511,7 +502,7 @@ if (!empty($genre_filter)) {
           transform: translateY(-5px);
       }
 
-      /* Ajustements pour les écrans mobiles */
+  
       @media (max-width: 768px) {
           .page-header h1 {
               font-size: 2.5rem;
@@ -529,8 +520,7 @@ if (!empty($genre_filter)) {
               margin-bottom: 15px;
           }
       }
-      
-      /* Fix pour Safari qui a des problèmes avec certains effets */
+       
       @media not all and (min-resolution:.001dpcm) { 
           @supports (-webkit-appearance:none) {
               .page-header h1, .feature-icon {
@@ -539,7 +529,7 @@ if (!empty($genre_filter)) {
           }
       }
 
-      /* Style pour le dropdown */
+  
       .dropdown-menu {
           background: rgba(10, 10, 10, 0.9);
           backdrop-filter: blur(10px);
@@ -557,7 +547,7 @@ if (!empty($genre_filter)) {
           transform: translateX(5px);
       }
       
-      /* Pagination */
+      
       .pagination {
           margin-top: 30px;
       }
@@ -584,7 +574,6 @@ if (!empty($genre_filter)) {
 </head>
 <body>
 
-  <!-- Barre de navigation -->
   <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
           <a class="navbar-brand" href="index.php">HACHA LUXURY SCENT</a>
@@ -628,17 +617,17 @@ if (!empty($genre_filter)) {
       </div>
   </nav>
 
-  <!-- En-tête de page -->
+ 
   <header class="page-header">
       <div class="container">
           <h1 data-aos="fade-up"><?php echo $page_title; ?></h1>
       </div>
   </header>
 
-  <!-- Section Produits avec filtres -->
+  
   <section class="products py-5">
       <div class="container">
-          <!-- Filtres -->
+        
           <div class="filters" data-aos="fade-up">
               <form action="produits.php" method="get" id="filter-form">
                   <?php if (!empty($genre_filter)): ?>
@@ -686,13 +675,12 @@ if (!empty($genre_filter)) {
                   </div>
               </form>
           </div>
-          
-          <!-- Affichage des produits -->
+       
           <div class="row">
               <?php
               if (!empty($produits)) {
                   foreach ($produits as $produit) {
-                      // Déterminer la classe du badge en fonction du genre
+                      
                       $badge_class = '';
                       switch ($produit['genre']) {
                           case 'homme':
@@ -723,7 +711,7 @@ if (!empty($genre_filter)) {
                       <?php
                   }
               } else {
-                  // Si aucun produit n'est trouvé avec les filtres actuels
+                  
                   echo '<div class="col-12 text-center"><p>Aucun produit ne correspond à votre recherche.</p></div>';
               }
               ?>
@@ -731,7 +719,7 @@ if (!empty($genre_filter)) {
       </div>
   </section>
 
-  <!-- Pied de page -->
+ 
   <footer class="bg-dark text-white py-5" id="contact">
       <div class="container">
           <div class="row">
@@ -771,22 +759,21 @@ if (!empty($genre_filter)) {
       </div>
   </footer>
 
-  <!-- Bouton retour en haut -->
+
   <div class="scroll-top">
       <i class="fas fa-arrow-up"></i>
   </div>
 
-  <!-- Bootstrap JS -->
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- AOS Animation Library -->
+ 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <!-- Animation Script -->
+  
   <script>
-      // Initialisation des animations AOS
       document.addEventListener('DOMContentLoaded', function() {
-          // Solution pour le bug Safari
+         
           setTimeout(function() {
               AOS.init({
                   duration: 800,
@@ -797,7 +784,6 @@ if (!empty($genre_filter)) {
           }, 100);
       });
       
-      // Navbar scroll effect - change l'apparence au scroll
       window.addEventListener('scroll', function() {
           const navbar = document.querySelector('.navbar');
           if (window.scrollY > 50) {
@@ -807,7 +793,6 @@ if (!empty($genre_filter)) {
           }
       });
 
-      // Bouton de retour en haut - apparaît après 300px de scroll
       const scrollTopBtn = document.querySelector('.scroll-top');
       
       window.addEventListener('scroll', function() {
@@ -830,7 +815,7 @@ if (!empty($genre_filter)) {
 </html>
 
 <?php
-// Fermer la connexion à la base de données
+// Fermer la connexion à la base de données//
 $conn->close();
 ?>
 
