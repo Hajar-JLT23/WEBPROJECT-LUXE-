@@ -1,13 +1,13 @@
 <?php
-// Démarrer la session pour gérer le panier
+
 session_start();
 
-// Initialiser le panier s'il n'existe pas
+
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
-// Compter le nombre d'articles dans le panier
+
 $nombre_articles = 0;
 foreach ($_SESSION['panier'] as $quantite) {
     $nombre_articles += $quantite;
@@ -16,7 +16,7 @@ foreach ($_SESSION['panier'] as $quantite) {
 // Connexion à la base de données
 $servername = "localhost";
 $username = "root"; 
-$password = "123ML@#jklhhh"; // Mot de passe vide par défaut pour XAMPP
+$password = ""; // ici faut mette son Mot de passe , puisque c'est un repostory public on a décidé de pas mettre notre mot de passe SQL vsible"
 $dbname = "hacha_luxury";
 
 try {
@@ -28,13 +28,12 @@ try {
     die("Erreur de connexion à la base de données: " . $e->getMessage());
 }
 
-// Récupérer les produits du panier
 $produits_commande = [];
 $total_commande = 0;
 
 if (!empty($_SESSION['panier'])) {
     foreach ($_SESSION['panier'] as $produit_id => $quantite) {
-        // Récupérer les informations du produit depuis la base de données
+      
         $sql = "SELECT id, nom, prix, image FROM produits WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $produit_id);
@@ -51,23 +50,18 @@ if (!empty($_SESSION['panier'])) {
     }
 }
 
-// Si le panier est vide, rediriger vers la page du panier
 if (empty($produits_commande)) {
     header("Location: panier.php");
     exit();
 }
 
-// Générer un numéro de commande unique
 $numero_commande = "CMD-" . date("YmdHis") . "-" . rand(1000, 9999);
 $date_commande = date("d/m/Y H:i");
 
-// Adresse de livraison (dans un cas réel, cela viendrait du formulaire de commande)
+
 $adresse_livraison = "15 Avenue des Champs-Élysées, 75008 Paris, France";
 $delai_livraison = "3-5 jours ouvrables";
 
-// Vider le panier après confirmation de paiement
-// Décommenter cette ligne dans un environnement de production
-// $_SESSION['panier'] = [];
 ?>
 
 <!DOCTYPE html>
@@ -77,26 +71,26 @@ $delai_livraison = "3-5 jours ouvrables";
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Confirmation de Commande - HACHA LUXURY SCENT</title>
   
-  <!-- Polices Google -->
+  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Bootstrap CSS -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
-  <!-- FontAwesome Icons -->
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
-  <!-- AOS Animation Library -->
+  
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
-      /* Variables de couleurs - harmonisées avec les autres pages */
+      
       :root {
-          --primary: #1b2845; /* bleu nuit profond */
-          --secondary: #c9b037; /* or ancien */
-          --accent: #ffd700; /* or brillant pour les accents */
-          --dark-bg: #0a0a0a; /* presque noir pour le fond */
-          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); /* dégradé doré */
+          --primary: #1b2845; 
+          --secondary: #c9b037; 
+          --accent: #ffd700; 
+          --dark-bg: #0a0a0a; 
+          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); 
       }
 
       body {
@@ -187,7 +181,7 @@ $delai_livraison = "3-5 jours ouvrables";
           text-shadow: 0 5px 15px rgba(0,0,0,0.5);
       }
 
-      /* Confirmation Section */
+     
       .confirmation-section {
           position: relative;
           padding: 80px 0;
@@ -341,7 +335,7 @@ $delai_livraison = "3-5 jours ouvrables";
           font-size: 1.2rem;
       }
 
-      /* Étapes de suivi */
+    
       .tracking-steps {
           margin: 40px 0;
           position: relative;
@@ -403,7 +397,7 @@ $delai_livraison = "3-5 jours ouvrables";
           margin-top: 10px;
       }
 
-      /* Boutons */
+   
       .btn-luxury {
           background: var(--gold-gradient);
           border: none;
@@ -449,7 +443,7 @@ $delai_livraison = "3-5 jours ouvrables";
           box-shadow: 0 10px 20px rgba(201, 176, 55, 0.4);
       }
 
-      /* Footer */
+      
       footer {
           background: var(--dark-bg);
           padding: 60px 0 30px;
@@ -487,7 +481,7 @@ $delai_livraison = "3-5 jours ouvrables";
           text-decoration: none;
       }
 
-      /* Social Icons */
+  
       .social-links a {
           display: inline-block;
           width: 40px;
@@ -507,14 +501,14 @@ $delai_livraison = "3-5 jours ouvrables";
           transform: translateY(-5px);
       }
 
-      /* Copyright */
+    
       .copyright {
           margin-top: 40px;
           padding-top: 20px;
           border-top: 1px solid rgba(255,255,255,0.1);
       }
 
-      /* Dropdown */
+   
       .dropdown-menu {
           background: rgba(10, 10, 10, 0.9);
           backdrop-filter: blur(10px);
@@ -532,7 +526,6 @@ $delai_livraison = "3-5 jours ouvrables";
           transform: translateX(5px);
       }
 
-      /* Info box */
       .info-box {
           background: rgba(201, 176, 55, 0.1);
           border-left: 4px solid var(--secondary);
@@ -546,7 +539,7 @@ $delai_livraison = "3-5 jours ouvrables";
           margin-right: 10px;
       }
 
-      /* Ajustements pour les écrans mobiles */
+      
       @media (max-width: 768px) {
           .page-header h1 {
               font-size: 2.5rem;
@@ -593,7 +586,7 @@ $delai_livraison = "3-5 jours ouvrables";
 </head>
 <body>
 
-  <!-- Barre de navigation -->
+
   <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
           <a class="navbar-brand" href="index.php">HACHA LUXURY SCENT</a>
@@ -639,14 +632,14 @@ $delai_livraison = "3-5 jours ouvrables";
       </div>
   </nav>
 
-  <!-- En-tête de page -->
+  
   <header class="page-header text-center">
       <div class="container">
           <h1 data-aos="fade-up">Confirmation de Commande</h1>
       </div>
   </header>
 
-  <!-- Section de confirmation -->
+
   <section class="confirmation-section">
       <div class="container">
           <div class="row justify-content-center">
@@ -765,7 +758,7 @@ $delai_livraison = "3-5 jours ouvrables";
       </div>
   </section>
 
-  <!-- Pied de page -->
+ 
   <footer class="bg-dark text-white py-5">
       <div class="container">
           <div class="row">
@@ -805,15 +798,13 @@ $delai_livraison = "3-5 jours ouvrables";
       </div>
   </footer>
 
-  <!-- Bootstrap JS -->
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- AOS Animation Library -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <!-- Animation Script -->
   <script>
-      // Initialisation des animations AOS
+      // Initialisation des animations AOS//
       document.addEventListener('DOMContentLoaded', function() {
           setTimeout(function() {
               AOS.init({
@@ -825,7 +816,6 @@ $delai_livraison = "3-5 jours ouvrables";
           }, 100);
       });
       
-      // Navbar scroll effect
       window.addEventListener('scroll', function() {
           const navbar = document.querySelector('.navbar');
           if (window.scrollY > 50) {
@@ -840,7 +830,7 @@ $delai_livraison = "3-5 jours ouvrables";
 </html>
 
 <?php
-// Fermer la connexion à la base de données
+// Fermer la connexion à la base de données//
 $conn->close();
 ?>
 
