@@ -1,13 +1,13 @@
 <?php
-// Démarrer la session pour gérer le panier
+
 session_start();
 
-// Initialiser le panier s'il n'existe pas
+
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
-// Compter le nombre d'articles dans le panier
+
 $nombre_articles = 0;
 foreach ($_SESSION['panier'] as $quantite) {
     $nombre_articles += $quantite;
@@ -16,8 +16,8 @@ foreach ($_SESSION['panier'] as $quantite) {
 
 // Connexion à la base de données
 $servername = "localhost";
-$username = "root"; // Généralement "root" en local
-$password = "123ML@#jklhhh"; // Mot de passe vide par défaut pour XAMPP
+$username = "root"; 
+$password = ""; // ici faut mette son Mot de passe , puisque c'est un repostory public on a décidé de pas mettre notre mot de passe SQL vsible//
 $dbname = "hacha_luxury";
 
 try {
@@ -26,7 +26,7 @@ try {
         throw new Exception("Connexion échouée: " . $conn->connect_error);
     }
     
-    // Récupérer les produits depuis la base de données
+    // pour récupérer  les produits depuis la base de données
     $sql = "SELECT * FROM produits ORDER BY id";
     $result = $conn->query($sql);
     $produits = [];
@@ -40,19 +40,19 @@ try {
     die("Erreur de connexion à la base de données: " . $e->getMessage());
 }
 
-// Traitement du formulaire de newsletter
+
 $message_newsletter = "";
 if (isset($_POST['newsletter_submit']) && isset($_POST['email'])) {
     $email = $_POST['email'];
     
-    // Vérifier si l'email est valide
+   
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        // Vérifier si l'email existe déjà
+      
         $check_sql = "SELECT * FROM newsletter WHERE email = '$email'";
         $check_result = $conn->query($check_sql);
         
         if ($check_result->num_rows == 0) {
-            // Insérer l'email dans la base de données
+        
             $insert_sql = "INSERT INTO newsletter (email) VALUES ('$email')";
             if ($conn->query($insert_sql) === TRUE) {
                 $message_newsletter = '<div class="alert alert-success mt-3">Merci pour votre inscription à notre newsletter!</div>';
@@ -67,19 +67,19 @@ if (isset($_POST['newsletter_submit']) && isset($_POST['email'])) {
     }
 }
 
-// Traitement de l'ajout au panier
+
 if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
     $produit_id = $_POST['produit_id'];
     $quantite = 1;
     
-    // Ajouter ou incrémenter la quantité dans le panier
+   
     if (isset($_SESSION['panier'][$produit_id])) {
         $_SESSION['panier'][$produit_id] += $quantite;
     } else {
         $_SESSION['panier'][$produit_id] = $quantite;
     }
     
-    // Rediriger pour éviter la soumission multiple du formulaire
+    
     header("Location: index.php#produits");
     exit();
 }
@@ -92,26 +92,24 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HACHA LUXURY SCENT - Parfums d'Exception</title>
   
-  <!-- Polices Google - Playfair pour l'élégance des titres et Poppins pour la lisibilité -->
+ 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Bootstrap CSS -->
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- FontAwesome Icons -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
-  <!-- AOS Animation Library -->
+  
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
-      /* Variables de couleurs - harmonisées avec la page À propos */
+  
       :root {
-          --primary: #1b2845; /* bleu nuit profond */
-          --secondary: #c9b037; /* or ancien */
-          --accent: #ffd700; /* or brillant pour les accents */
-          --dark-bg: #0a0a0a; /* presque noir pour le fond */
-          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); /* dégradé doré inspiré des reflets de lumière */
+          --primary: #1b2845; 
+          --secondary: #c9b037; 
+          --accent: #ffd700; 
+          --dark-bg: #0a0a0a; 
+          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); 
       }
 
       body {
@@ -126,7 +124,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           letter-spacing: 1px;
       }
 
-      /* Animations - j'ai ajouté un délai pour que ça soit plus naturel */
+      /* Animations - on  a  ajouté un délai pour que ça soit plus naturel */
       @keyframes fadeIn {
           from { 
               opacity: 0; 
@@ -142,7 +140,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           animation: fadeIn 1s ease-out;
       }
 
-      /* Navbar - avec effet de verre comme sur la page À propos */
+    
       .navbar {
           background: rgba(10, 10, 10, 0.8) !important;
           backdrop-filter: blur(10px);
@@ -187,7 +185,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           transform: translateY(-2px);
       }
 
-      /* Hero Section - avec une image marocaine en arrière-plan */
+
       .hero {
           background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
                       url('https://images.unsplash.com/photo-1596203721435-99e556d3fbb2?ixlib=rb-4.0.3') no-repeat center center;
@@ -199,7 +197,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           position: relative;
       }
 
-      /* Motif marocain décoratif sur le hero */
+     
       .hero::before {
           content: '';
           position: absolute;
@@ -234,8 +232,6 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           max-width: 700px;
           margin: 0 auto 2rem;
       }
-
-      /* Bouton de style marocain */
       .btn-luxury {
           background: var(--gold-gradient);
           border: none;
@@ -252,13 +248,13 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           box-shadow: 0 10px 20px rgba(201, 176, 55, 0.4);
       }
 
-      /* Product Cards - redesign pour un look plus luxueux */
+    
       .products {
           position: relative;
           padding: 100px 0;
       }
 
-      /* Motif marocain subtil en arrière-plan */
+      
       .products::before {
           content: '';
           position: absolute;
@@ -321,7 +317,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           transform: scale(1.05);
       }
 
-      /* Effet de brillance qui passe sur l'image */
+
       .product-card::before {
           content: '';
           position: absolute;
@@ -357,7 +353,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           color: #ddd !important;
       }
 
-      /* Boutons */
+    
       .btn-primary {
           background: var(--gold-gradient);
           border: none;
@@ -372,14 +368,13 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           box-shadow: 0 5px 15px rgba(201, 176, 55, 0.3);
       }
 
-      /* Features - avec icônes dorées */
       .features {
           background: rgba(10, 10, 10, 0.8);
           position: relative;
           padding: 80px 0;
       }
 
-      /* Bordure décorative marocaine */
+      
       .features::before {
           content: '';
           position: absolute;
@@ -427,7 +422,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           position: relative;
       }
 
-      /* Motif marocain subtil */
+    
       .newsletter::before {
           content: '';
           position: absolute;
@@ -464,7 +459,6 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           box-shadow: 0 0 0 0.25rem rgba(201, 176, 55, 0.25);
       }
 
-      /* Footer */
       footer {
           background: var(--dark-bg);
           padding: 60px 0 30px;
@@ -522,14 +516,13 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           transform: translateY(-5px);
       }
 
-      /* Copyright */
       .copyright {
           margin-top: 40px;
           padding-top: 20px;
           border-top: 1px solid rgba(255,255,255,0.1);
       }
 
-      /* Scroll to top button */
+     
       .scroll-top {
           position: fixed;
           bottom: 30px;
@@ -560,7 +553,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           transform: translateY(-5px);
       }
 
-      /* Ajustements pour les écrans mobiles */
+    
       @media (max-width: 768px) {
           .hero h1 {
               font-size: 2.5rem;
@@ -575,7 +568,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           }
       }
       
-      /* Fix pour Safari qui a des problèmes avec certains effets */
+   
       @media not all and (min-resolution:.001dpcm) { 
           @supports (-webkit-appearance:none) {
               .hero h1, .feature-icon {
@@ -584,7 +577,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           }
       }
 
-      /* Style pour le dropdown */
+     
       .dropdown-menu {
           background: rgba(10, 10, 10, 0.9);
           backdrop-filter: blur(10px);
@@ -602,7 +595,6 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           transform: translateX(5px);
       }
       
-      /* Style pour le bouton "Voir tous nos parfums" */
       #voir-tous-parfums {
           display: inline-block;
           cursor: pointer;
@@ -612,7 +604,6 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
 </head>
 <body>
 
-  <!-- Barre de navigation -->
   <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
           <a class="navbar-brand" href="index.php">HACHA LUXURY SCENT</a>
@@ -657,7 +648,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
       </div>
   </nav>
 
-  <!-- Section Hero -->
+
   <section class="hero" id="accueil">
       <div class="container hero-content">
           <h1 class="display-4 mb-4" data-aos="fade-up">Découvrez Votre Parfum Signature</h1>
@@ -676,15 +667,14 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
       </div>
   </section>
 
-  <!-- Section Produits -->
   <section class="products py-5" id="produits">
       <div class="container">
           <h2 class="text-center mb-5" data-aos="fade-up">Nos Parfums De Luxe</h2>
           <div class="row">
               <?php
-              // Afficher les produits depuis la base de données
+            
               if (!empty($produits)) {
-                  // Limiter à 14 produits sur la page d'accueil
+                  
                   $produits_limite = array_slice($produits, 0, 14);
                   
                   foreach ($produits_limite as $produit) {
@@ -705,7 +695,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
                       <?php
                   }
               } else {
-                  // Si aucun produit n'est trouvé dans la base de données, afficher un message
+                  // Si aucun produit n'est trouvé dans la base de données, afficher un message//
                   echo '<div class="col-12 text-center"><p>Aucun produit disponible pour le moment.</p></div>';
               }
               ?>
@@ -717,7 +707,6 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
       </div>
   </section>
 
-  <!-- Section Avantages -->
   <section class="features py-5">
       <div class="container">
           <div class="row text-center">
@@ -740,7 +729,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
       </div>
   </section>
 
-  <!-- Section Newsletter -->
+  
   <section class="newsletter py-5">
       <div class="container text-center">
           <h3 data-aos="fade-up">Inscrivez-vous à Notre Newsletter</h3>
@@ -757,7 +746,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
       </div>
   </section>
 
-  <!-- Pied de page -->
+  
   <footer class="bg-dark text-white py-5" id="contact">
       <div class="container">
           <div class="row">
@@ -797,22 +786,22 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
       </div>
   </footer>
 
-  <!-- Bouton retour en haut -->
+
   <div class="scroll-top">
       <i class="fas fa-arrow-up"></i>
   </div>
 
-  <!-- Bootstrap JS -->
+ 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- AOS Animation Library -->
+
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <!-- Animation Script -->
+  
   <script>
-      // Initialisation des animations AOS
+   
       document.addEventListener('DOMContentLoaded', function() {
-          // Solution pour le bug Safari
+          
           setTimeout(function() {
               AOS.init({
                   duration: 800,
@@ -823,7 +812,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           }, 100);
       });
       
-      // Navbar scroll effect - change l'apparence au scroll
+   
       window.addEventListener('scroll', function() {
           const navbar = document.querySelector('.navbar');
           if (window.scrollY > 50) {
@@ -833,7 +822,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           }
       });
 
-      // Smooth scrolling pour les liens d'ancrage
+    
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           anchor.addEventListener('click', function (e) {
               e.preventDefault();
@@ -851,7 +840,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           });
       });
 
-      // Bouton de retour en haut - apparaît après 300px de scroll
+    
       const scrollTopBtn = document.querySelector('.scroll-top');
       
       window.addEventListener('scroll', function() {
@@ -869,7 +858,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           });
       });
       
-      // Animation des éléments au scroll
+     
       function isInViewport(element) {
           const rect = element.getBoundingClientRect();
           return (
@@ -888,11 +877,11 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
           });
       }
       
-      // Vérifier au chargement et au scroll
+    
       window.addEventListener('load', checkFade);
       window.addEventListener('scroll', checkFade);
 
-      // Assurer que le bouton "Voir tous nos parfums" fonctionne correctement
+      
       document.addEventListener('DOMContentLoaded', function() {
           const voirTousBtn = document.getElementById('voir-tous-parfums');
           if (voirTousBtn) {
@@ -904,7 +893,7 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
   </script>
 
   <script>
-      // Filtrage des produits par catégorie
+      
       document.addEventListener('DOMContentLoaded', function() {
           const filterLinks = document.querySelectorAll('[data-filter]');
           
@@ -927,7 +916,6 @@ if (isset($_POST['ajouter_panier']) && isset($_POST['produit_id'])) {
                       }
                   });
                   
-                  // Scroll to products section
                   const productsSection = document.querySelector('#produits');
                   productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
               });
