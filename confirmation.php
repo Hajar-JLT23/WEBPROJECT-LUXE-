@@ -16,7 +16,7 @@ foreach ($_SESSION['panier'] as $quantite) {
 // Connexion à la base de données
 $servername = "localhost";
 $username = "root"; 
-$password = ""; // ici faut mette son Mot de passe , puisque c'est un repostory public on a décidé de pas mettre notre mot de passe SQL vsible"
+$password = ""; // ici faut mette son Mot de passe , puisque c'est un repostory public on a décidé de pas mettre notre mot de passe SQL vsible//
 $dbname = "hacha_luxury";
 
 try {
