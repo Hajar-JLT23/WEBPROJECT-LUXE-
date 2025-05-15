@@ -1,13 +1,12 @@
 <?php
-// Démarrer la session pour gérer le panier
+
 session_start();
 
-// Initialiser le panier s'il n'existe pas
 if (!isset($_SESSION['panier'])) {
   $_SESSION['panier'] = [];
 }
 
-// Compter le nombre d'articles dans le panier
+
 $nombre_articles = 0;
 foreach ($_SESSION['panier'] as $quantite) {
   $nombre_articles += $quantite;
@@ -15,31 +14,26 @@ foreach ($_SESSION['panier'] as $quantite) {
 
 // Connexion à la base de données
 $servername = "localhost";
-$username = "root"; // Généralement "root" en local
-$password = "123ML@#jklhhh"; // Souvent vide en local
+$username = "root"; 
+$password = ""; // ici faut mette son Mot de passe , puisque c'est un repostory public on a décidé de pas mettre notre mot de passe SQL vsible//
 $dbname = "hacha_luxury";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connexion échouée: " . $conn->connect_error);
 }
-// Traitement de l'ajout du parfum personnalisé au panier
 if (isset($_POST['ajouter_personnalise'])) {
     $nom_parfum = $_POST['nom_parfum'];
-    $notes = $_POST['notes']; // JSON des notes sélectionnées
+    $notes = $_POST['notes']; 
     $prix = $_POST['prix'];
-    
-    // Ici, vous pourriez enregistrer le parfum personnalisé dans la base de données
-    // et récupérer son ID pour l'ajouter au panier
-    
-    // Pour l'exemple, nous allons simplement ajouter un produit spécial au panier
+   
+    //  ajouter un produit spécial au panier
     $_SESSION['parfum_personnalise'] = [
         'nom' => $nom_parfum,
         'notes' => $notes,
         'prix' => $prix
     ];
     
-    // Rediriger vers le panier
     header("Location: panier.php");
     exit();
 }
@@ -52,26 +46,22 @@ if (isset($_POST['ajouter_personnalise'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Personnalisation de Parfum - HACHA LUXURY SCENT</title>
   
-  <!-- Polices Google -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  
-  <!-- AOS Animation Library -->
+
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <style>
-      /* Variables de couleurs - harmonisées avec les autres pages */
+    
       :root {
-          --primary: #1b2845; /* bleu nuit profond */
-          --secondary: #c9b037; /* or ancien */
-          --accent: #ffd700; /* or brillant pour les accents */
-          --dark-bg: #0a0a0a; /* presque noir pour le fond */
-          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); /* dégradé doré */
+          --primary: #1b2845; 
+          --secondary: #c9b037; 
+          --accent: #ffd700; 
+          --dark-bg: #0a0a0a; 
+          --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7);
           
           /* Couleurs pour les notes de parfum */
           --note-floral: #e0a2c5;
@@ -94,7 +84,6 @@ if (isset($_POST['ajouter_personnalise'])) {
           letter-spacing: 1px;
       }
 
-      /* Navbar - avec effet de verre comme sur les autres pages */
       .navbar {
           background: rgba(10, 10, 10, 0.8) !important;
           backdrop-filter: blur(10px);
@@ -139,7 +128,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           transform: translateY(-2px);
       }
 
-      /* Hero Section */
+      
       .hero {
           background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
                       url('https://images.unsplash.com/photo-1596203721435-99e556d3fbb2?ixlib=rb-4.0.3') no-repeat center center;
@@ -151,7 +140,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           position: relative;
       }
 
-      /* Motif marocain décoratif sur le hero */
+    
       .hero::before {
           content: '';
           position: absolute;
@@ -185,7 +174,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           margin: 0 auto 2rem;
       }
 
-      /* Bouton de style marocain */
+     
       .btn-luxury {
           background: var(--gold-gradient);
           border: none;
@@ -202,13 +191,13 @@ if (isset($_POST['ajouter_personnalise'])) {
           box-shadow: 0 10px 20px rgba(201, 176, 55, 0.4);
       }
 
-      /* Section de personnalisation */
+     
       .customization-section {
           padding: 100px 0;
           position: relative;
       }
 
-      /* Motif marocain subtil en arrière-plan */
+   
       .customization-section::before {
           content: '';
           position: absolute;
@@ -240,7 +229,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           transform: translateX(-50%);
       }
 
-      /* Conteneur de la bouteille */
+      
       .bottle-container {
           position: relative;
           height: 400px;
@@ -250,7 +239,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           margin-bottom: 50px;
       }
 
-      /* Bouteille de parfum */
+     
       .perfume-bottle {
           position: relative;
           width: 120px;
@@ -297,7 +286,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           transition: height 1s ease, background 1s ease;
       }
 
-      /* Effet de brillance sur la bouteille */
+      
       .perfume-bottle::before {
           content: '';
           position: absolute;
@@ -315,7 +304,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           left: 125%;
       }
 
-      /* Effet de reflet sur la bouteille */
+    
       .bottle-reflection {
           position: absolute;
           top: 0;
@@ -326,7 +315,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           pointer-events: none;
       }
 
-      /* Notes de parfum */
+     
       .notes-container {
           margin-top: 50px;
       }
@@ -391,7 +380,6 @@ if (isset($_POST['ajouter_personnalise'])) {
           margin-bottom: 0;
       }
 
-      /* Indicateur de pourcentage */
       .note-percentage {
           position: absolute;
           top: 5px;
@@ -414,7 +402,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           opacity: 1;
       }
 
-      /* Récapitulatif de la création */
+      
       .creation-summary {
           background: rgba(27, 40, 69, 0.7);
           border-radius: 15px;
@@ -517,7 +505,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           animation: bottleGlow 2s infinite;
       }
 
-      /* Tooltip pour les notes */
+   
       .tooltip-custom {
           position: absolute;
           background: rgba(10, 10, 10, 0.9);
@@ -545,7 +533,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           border-color: rgba(10, 10, 10, 0.9) transparent transparent transparent;
       }
 
-      /* Footer */
+      
       footer {
           background: var(--dark-bg);
           padding: 60px 0 30px;
@@ -583,7 +571,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           text-decoration: none;
       }
 
-      /* Social Icons */
+     
       .social-links a {
           display: inline-block;
           width: 40px;
@@ -603,14 +591,13 @@ if (isset($_POST['ajouter_personnalise'])) {
           transform: translateY(-5px);
       }
 
-      /* Copyright */
+     
       .copyright {
           margin-top: 40px;
           padding-top: 20px;
           border-top: 1px solid rgba(255,255,255,0.1);
       }
 
-      /* Responsive */
       @media (max-width: 768px) {
           .hero h1 {
               font-size: 2.5rem;
@@ -633,7 +620,7 @@ if (isset($_POST['ajouter_personnalise'])) {
 </head>
 <body>
 
-  <!-- Barre de navigation -->
+  
   <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
           <a class="navbar-brand" href="index.php">HACHA LUXURY SCENT</a>
@@ -676,7 +663,7 @@ if (isset($_POST['ajouter_personnalise'])) {
           </div>
       </div>
   </nav>
-<!-- Section Hero -->
+
 <section class="hero">
     <div class="container hero-content">
         <h1 class="display-4 mb-4" data-aos="fade-up">Créez Votre Parfum Unique</h1>
@@ -684,12 +671,11 @@ if (isset($_POST['ajouter_personnalise'])) {
     </div>
 </section>
 
-<!-- Section de personnalisation -->
 <section class="customization-section">
     <div class="container">
         <h2 class="text-center mb-5" data-aos="fade-up">Personnalisez Votre Fragrance</h2>
         
-        <!-- Bouteille de parfum -->
+       
         <div class="bottle-container" data-aos="fade-up">
             <div class="perfume-bottle">
                 <div class="bottle-neck"></div>
@@ -701,9 +687,9 @@ if (isset($_POST['ajouter_personnalise'])) {
         
         <div class="row">
             <div class="col-lg-8" data-aos="fade-up">
-                <!-- Notes de parfum -->
+             
                 <div class="notes-container">
-                    <!-- Notes de tête -->
+                  
                     <div class="note-category">
                         <h3>Notes de Tête</h3>
                         <p>Les premières impressions de votre parfum, fraîches et vives.</p>
@@ -734,8 +720,7 @@ if (isset($_POST['ajouter_personnalise'])) {
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Notes de cœur -->
+                 
                     <div class="note-category">
                         <h3>Notes de Cœur</h3>
                         <p>L'âme de votre parfum, florales et épicées.</p>
@@ -767,7 +752,7 @@ if (isset($_POST['ajouter_personnalise'])) {
                         </div>
                     </div>
                     
-                    <!-- Notes de fond -->
+                    
                     <div class="note-category">
                         <h3>Notes de Fond</h3>
                         <p>La signature durable de votre parfum, boisée et ambrée.</p>
@@ -817,7 +802,7 @@ if (isset($_POST['ajouter_personnalise'])) {
             </div>
             
             <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                <!-- Récapitulatif de la création -->
+                
                 <div class="creation-summary">
                     <h3>Votre Création</h3>
                     <div id="summaryList" class="summary-list">
@@ -846,7 +831,6 @@ if (isset($_POST['ajouter_personnalise'])) {
     </div>
 </section>
 
-<!-- Pied de page -->
 <footer class="bg-dark text-white py-5" id="contact">
     <div class="container">
         <div class="row">
@@ -886,18 +870,17 @@ if (isset($_POST['ajouter_personnalise'])) {
     </div>
 </footer>
 
-<!-- Tooltip personnalisé -->
+
 <div class="tooltip-custom" id="tooltip"></div>
 
-<!-- Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- AOS Animation Library -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-<!-- Script de personnalisation -->
+
 <script>
-    // Initialisation des animations AOS
+    
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
             AOS.init({
@@ -908,7 +891,7 @@ if (isset($_POST['ajouter_personnalise'])) {
             });
         }, 100);
         
-        // Initialisation de la personnalisation
+       
         initCustomization();
     });
     
@@ -924,7 +907,7 @@ if (isset($_POST['ajouter_personnalise'])) {
         
         let selectedNotes = [];
         let totalPercentage = 0;
-        const MAX_NOTES = 6; // Maximum de notes sélectionnables
+        const MAX_NOTES = 6; 
         
         // Gestion des notes de parfum
         noteItems.forEach(item => {
@@ -934,7 +917,7 @@ if (isset($_POST['ajouter_personnalise'])) {
                 tooltip.textContent = description;
                 tooltip.style.opacity = '1';
                 
-                // Positionnement du tooltip
+              // Positionnement du tooltip
                 const rect = this.getBoundingClientRect();
                 tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
                 tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
@@ -944,7 +927,7 @@ if (isset($_POST['ajouter_personnalise'])) {
                 tooltip.style.opacity = '0';
             });
             
-            // Sélection des notes
+            // POUR LA Sélection des notes
             item.addEventListener('click', function() {
                 const name = this.getAttribute('data-name');
                 const category = this.getAttribute('data-category');
@@ -992,7 +975,7 @@ if (isset($_POST['ajouter_personnalise'])) {
             });
         });
         
-        // Mise à jour de la bouteille
+       
         function updateBottle() {
             if (selectedNotes.length === 0) {
                 bottleContent.style.height = '0%';
@@ -1001,20 +984,19 @@ if (isset($_POST['ajouter_personnalise'])) {
                 return;
             }
             
-            // Calculer la hauteur de remplissage (max 95%)
+            // Calculer la hauteur de remplissage, on a fait (max 95%)
             const fillHeight = Math.min(totalPercentage, 100) * 0.95;
             bottleContent.style.setProperty('--fill-height', fillHeight + '%');
             
             // Créer un dégradé de couleurs basé sur les notes sélectionnées
             let gradientColors = selectedNotes.map(note => note.color);
             if (gradientColors.length === 1) {
-                gradientColors.push(gradientColors[0]); // Dupliquer la couleur si une seule note
+                gradientColors.push(gradientColors[0]); 
             }
             
             const gradient = `linear-gradient(to top, ${gradientColors.join(', ')})`;
             bottleContent.style.background = gradient;
-            
-            // Animation de remplissage
+             //pour l'animation de la bouteille//
             bottleContent.style.animation = 'bottleFill 1s forwards';
             
             // Effet de brillance si la bouteille est suffisamment remplie
@@ -1025,7 +1007,7 @@ if (isset($_POST['ajouter_personnalise'])) {
             }
         }
         
-        // Mise à jour du récapitulatif
+    
         function updateSummary() {
             if (selectedNotes.length === 0) {
                 summaryList.innerHTML = '<p class="text-center text-muted">Sélectionnez des notes pour composer votre parfum</p>';
@@ -1033,13 +1015,13 @@ if (isset($_POST['ajouter_personnalise'])) {
                 return;
             }
             
-            // Trier les notes par catégorie
+           
             const sortedNotes = [...selectedNotes].sort((a, b) => {
                 const order = { 'tete': 1, 'coeur': 2, 'fond': 3 };
                 return order[a.category] - order[b.category];
             });
             
-            // Générer le HTML du récapitulatif
+           
             let html = '';
             sortedNotes.forEach(note => {
                 html += `
@@ -1049,7 +1031,7 @@ if (isset($_POST['ajouter_personnalise'])) {
                 </div>
                 `;
                 
-                // Mettre à jour les pourcentages affichés sur les notes
+               
                 const noteItem = document.querySelector(`.note-item[data-name="${note.name}"]`);
                 if (noteItem) {
                     const percentageEl = noteItem.querySelector('.note-percentage');
@@ -1059,10 +1041,10 @@ if (isset($_POST['ajouter_personnalise'])) {
             
             summaryList.innerHTML = html;
             
-            // Activer le bouton de finalisation si au moins 3 notes sont sélectionnées
+        
             checkoutBtn.disabled = selectedNotes.length < 3;
             
-            // Calculer le prix en fonction du nombre de notes
+            // Calculer le prix en fonction du nombre de notes//
             const basePrice = 150;
             const pricePerNote = 15;
             const finalPrice = basePrice + (selectedNotes.length - 3) * pricePerNote;
@@ -1072,41 +1054,41 @@ if (isset($_POST['ajouter_personnalise'])) {
             parfumPriceInput.value = displayPrice;
         }
         
-        // Ajuster les pourcentages des notes (fonctionnalité avancée)
+        // Ajuster les pourcentages des notes //
         document.querySelectorAll('.note-percentage').forEach(el => {
             el.addEventListener('click', function(e) {
-                e.stopPropagation(); // Empêcher la propagation au parent
+                e.stopPropagation(); 
                 
                 const noteItem = this.closest('.note-item');
                 const noteName = noteItem.getAttribute('data-name');
                 const note = selectedNotes.find(n => n.name === noteName);
                 
                 if (note) {
-                    // Demander le nouveau pourcentage
+                    
                     const newPercentage = prompt(`Ajustez le pourcentage pour ${noteName} (5-30%):`, note.percentage);
                     
                     if (newPercentage !== null) {
                         const percentage = parseInt(newPercentage);
                         
                         if (!isNaN(percentage) && percentage >= 5 && percentage <= 30) {
-                            // Mettre à jour le pourcentage total
+                           
                             totalPercentage = totalPercentage - note.percentage + percentage;
                             
-                            // Vérifier si le total ne dépasse pas 100%
+                     
                             if (totalPercentage > 100) {
                                 alert('Le pourcentage total ne peut pas dépasser 100%.');
                                 return;
                             }
                             
-                            // Mettre à jour la note
+                           
                             note.percentage = percentage;
                             this.textContent = percentage + '%';
                             
-                            // Mettre à jour l'affichage
+                           
                             updateBottle();
                             updateSummary();
                             
-                            // Mettre à jour le champ caché pour le formulaire
+                           
                             selectedNotesInput.value = JSON.stringify(selectedNotes);
                         } else {
                             alert('Veuillez entrer un pourcentage valide entre 5 et 30.');
@@ -1117,7 +1099,6 @@ if (isset($_POST['ajouter_personnalise'])) {
         });
     }
     
-    // Navbar scroll effect
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
         if (window.scrollY > 50) {
@@ -1131,7 +1112,7 @@ if (isset($_POST['ajouter_personnalise'])) {
 </html>
 
 <?php
-// Fermer la connexion à la base de données si elle existe
+// Fermer la connexion à la base de données //
 if (isset($conn) && $conn) {
     $conn->close();
 }
