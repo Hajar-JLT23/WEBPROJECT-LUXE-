@@ -1,22 +1,18 @@
 <?php
-// Démarrer la session pour gérer le panier
 session_start();
 
-// Initialiser le panier s'il n'existe pas
 if (!isset($_SESSION['panier'])) {
   $_SESSION['panier'] = [];
 }
 
-// Compter le nombre d'articles dans le panier
 $nombre_articles = 0;
 foreach ($_SESSION['panier'] as $quantite) {
   $nombre_articles += $quantite;
 }
 
-// Connexion à la base de données
 $servername = "localhost";
-$username = "root"; // Généralement "root" en local
-$password = "123ML@#jklhhh"; // Souvent vide en local
+$username = "root"; 
+$password = ""; 
 $dbname = "hacha_luxury";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -33,29 +29,23 @@ if ($conn->connect_error) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>À Propos - HACHA LUXURY SCENT</title>
     
-    <!-- Polices Google - J'ai choisi Playfair pour les titres car elle a un style élégant qui correspond bien au luxe -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap - on utilise la version 5.3.2 qui est stable -->
+  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- FontAwesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- AOS pour les animations au scroll - à tester sur mobile -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* Variables de couleurs - inspirées des teintes dorées et bleu nuit des flacons de parfum */
+    
         :root {
-            --primary: #1b2845; /* bleu nuit profond */
-            --secondary: #c9b037; /* or ancien */
-            --accent: #ffd700; /* or brillant pour les accents */
-            --dark-bg: #0a0a0a; /* presque noir pour le fond */
-            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); /* dégradé doré inspiré des reflets de lumière */
+            --primary: #1b2845; 
+            --secondary: #c9b037; 
+            --accent: #ffd700; 
+            --dark-bg: #0a0a0a; 
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); 
         }
-
-        /* Style de base */
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, var(--primary), #0d1b2a);
@@ -63,13 +53,11 @@ if ($conn->connect_error) {
             overflow-x: hidden;
         }
 
-        /* Typographie - Playfair pour l'élégance des titres */
         h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
             letter-spacing: 1px;
         }
 
-        /* Navbar - avec effet de verre pour un look moderne */
         .navbar {
             background: rgba(10, 10, 10, 0.8) !important;
             backdrop-filter: blur(10px);
@@ -83,8 +71,6 @@ if ($conn->connect_error) {
             font-family: 'Playfair Display', serif;
             letter-spacing: 2px;
         }
-
-        /* Animation des liens de navigation - effet de soulignement doré */
         .nav-link {
             color: white !important;
             font-weight: 500;
@@ -114,9 +100,9 @@ if ($conn->connect_error) {
             transform: translateY(-2px);
         }
 
-        /* Section Hero - image de fond choisie pour son ambiance luxueuse */
+    
         .hero {
-            height: 80vh; /* hauteur fixe pour garantir l'impact visuel */
+            height: 80vh; 
             background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.7)), 
                         url('https://images.unsplash.com/photo-1596203721435-99e556d3fbb2?ixlib=rb-4.0.3') no-repeat center center;
             background-size: cover;
@@ -126,13 +112,12 @@ if ($conn->connect_error) {
             position: relative;
         }
 
-        /* Contenu du hero centré pour maximiser l'impact */
         .hero-content {
             text-align: center;
             z-index: 1;
         }
 
-        /* Titre avec effet de texte doré - j'ai galéré à faire fonctionner ça sur Safari! */
+        
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 1.5rem;
@@ -148,7 +133,7 @@ if ($conn->connect_error) {
             margin: 0 auto 2rem;
         }
 
-        /* Bouton avec effet de brillance dorée */
+       
         .btn-luxury {
             background: var(--gold-gradient);
             border: none;
@@ -165,12 +150,12 @@ if ($conn->connect_error) {
             box-shadow: 0 10px 20px rgba(201, 176, 55, 0.4);
         }
 
-        /* Section À propos */
+   
         .about-section {
             padding: 100px 0;
         }
 
-        /* Titre avec ligne décorative - inspiré des étiquettes de parfum vintage */
+      
         .about-section h2 {
             font-size: 2.5rem;
             margin-bottom: 2rem;
@@ -199,7 +184,7 @@ if ($conn->connect_error) {
             line-height: 1.8;
         }
 
-        /* Images avec effet de brillance au survol - comme un flacon qui capte la lumière */
+       
         .about-img {
             border-radius: 10px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
@@ -208,7 +193,7 @@ if ($conn->connect_error) {
             overflow: hidden;
         }
 
-        /* Effet de reflet qui passe sur l'image - comme la lumière sur un flacon de parfum */
+     
         .about-img::before {
             content: '';
             position: absolute;
@@ -229,7 +214,7 @@ if ($conn->connect_error) {
             transform: scale(1.03);
         }
 
-        /* Boîtes d'icônes avec effet de survol */
+      
         .icon-box {
             background: rgba(27, 40, 69, 0.6);
             border-radius: 10px;
@@ -246,7 +231,7 @@ if ($conn->connect_error) {
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        /* Icônes avec effet de texte doré */
+
         .icon {
             color: var(--secondary);
             font-size: 2.5rem;
@@ -256,7 +241,7 @@ if ($conn->connect_error) {
             -webkit-text-fill-color: transparent;
         }
 
-        /* Timeline - j'ai passé du temps à faire fonctionner ça correctement sur mobile */
+      
         .timeline {
             position: relative;
             max-width: 1200px;
@@ -264,7 +249,7 @@ if ($conn->connect_error) {
             padding: 50px 0;
         }
 
-        /* Ligne centrale dorée */
+      
         .timeline::after {
             content: '';
             position: absolute;
@@ -277,7 +262,7 @@ if ($conn->connect_error) {
             border-radius: 10px;
         }
 
-        /* Positionnement des éléments de timeline */
+      
         .timeline-item {
             padding: 10px 40px;
             position: relative;
@@ -293,7 +278,7 @@ if ($conn->connect_error) {
             left: 50%;
         }
 
-        /* Points dorés sur la timeline */
+        
         .timeline-item::after {
             content: '';
             position: absolute;
@@ -310,7 +295,7 @@ if ($conn->connect_error) {
             left: -12px;
         }
 
-        /* Contenu de la timeline */
+     
         .timeline-content {
             padding: 20px 30px;
             background: rgba(27, 40, 69, 0.6);
@@ -323,7 +308,7 @@ if ($conn->connect_error) {
             margin-top: 0;
         }
 
-        /* Section équipe - fond avec effet parallaxe */
+       
         .team-section {
             padding: 100px 0;
             background: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.8)), 
@@ -331,7 +316,6 @@ if ($conn->connect_error) {
             background-size: cover;
         }
 
-        /* Cartes des membres de l'équipe */
         .team-card {
             background: rgba(27, 40, 69, 0.7);
             border-radius: 10px;
@@ -347,7 +331,7 @@ if ($conn->connect_error) {
             border-color: var(--secondary);
         }
 
-        /* Images de l'équipe avec effet de zoom au survol */
+       
         .team-img {
             position: relative;
             overflow: hidden;
@@ -361,7 +345,7 @@ if ($conn->connect_error) {
             transform: scale(1.1);
         }
 
-        /* Infos de l'équipe */
+     
         .team-info {
             padding: 25px;
             text-align: center;
@@ -377,7 +361,7 @@ if ($conn->connect_error) {
             margin-bottom: 15px;
         }
 
-        /* Icônes sociales avec effet de survol */
+     
         .team-social a {
             color: white;
             margin: 0 10px;
@@ -389,12 +373,12 @@ if ($conn->connect_error) {
             transform: translateY(-3px);
         }
 
-        /* Section témoignages */
+       
         .testimonial-section {
             padding: 100px 0;
         }
 
-        /* Cartes de témoignages avec effet de survol */
+        
         .testimonial-card {
             background: rgba(27, 40, 69, 0.6);
             border-radius: 10px;
@@ -411,7 +395,7 @@ if ($conn->connect_error) {
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        /* Icône de citation */
+     
         .testimonial-card::before {
             content: '\f10d';
             font-family: 'Font Awesome 5 Free';
@@ -423,14 +407,14 @@ if ($conn->connect_error) {
             color: rgba(201, 176, 55, 0.2);
         }
 
-        /* Texte du témoignage */
+      
         .testimonial-text {
             font-style: italic;
             margin-bottom: 20px;
             padding-top: 20px;
         }
 
-        /* Auteur du témoignage */
+      
         .testimonial-author {
             display: flex;
             align-items: center;
@@ -449,7 +433,7 @@ if ($conn->connect_error) {
             color: var(--secondary);
         }
 
-        /* Footer avec bordure dorée en haut */
+     
         footer {
             background: var(--dark-bg);
             padding: 60px 0 30px;
@@ -472,7 +456,6 @@ if ($conn->connect_error) {
             font-size: 1.5rem;
         }
 
-        /* Liens du footer avec effet de survol */
         .footer-links {
             list-style: none;
             padding: 0;
@@ -494,7 +477,7 @@ if ($conn->connect_error) {
             transform: translateX(5px);
         }
 
-        /* Icônes sociales du footer */
+      
         .social-links {
             margin-top: 30px;
         }
@@ -518,14 +501,14 @@ if ($conn->connect_error) {
             transform: translateY(-5px);
         }
 
-        /* Copyright avec bordure supérieure */
+  
         .copyright {
             margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Animations - à vérifier sur les navigateurs plus anciens */
+       
         .fade-up {
             opacity: 0;
             transform: translateY(20px);
@@ -537,7 +520,7 @@ if ($conn->connect_error) {
             transform: translateY(0);
         }
 
-        /* Effet parallaxe - peut être désactivé sur mobile pour les performances */
+       
         .parallax {
             background-attachment: fixed;
             background-position: center;
@@ -545,7 +528,7 @@ if ($conn->connect_error) {
             background-size: cover;
         }
 
-        /* Bordure dorée - effet spécial pour les images et contenus importants */
+     
         .gold-border {
             position: relative;
             padding: 3px;
@@ -560,7 +543,7 @@ if ($conn->connect_error) {
             height: 100%;
         }
 
-        /* Bouton de retour en haut - apparaît au scroll */
+      
         .scroll-top {
             position: fixed;
             bottom: 30px;
@@ -591,7 +574,7 @@ if ($conn->connect_error) {
             transform: translateY(-5px);
         }
         
-        /* Ajout d'un style personnalisé pour notre section signature */
+      
         .signature-section {
             padding: 80px 0;
             position: relative;
@@ -640,7 +623,7 @@ if ($conn->connect_error) {
             transform: translateY(-3px);
         }
         
-        /* Fix pour Safari qui a des problèmes avec certains effets */
+   
         @media not all and (min-resolution:.001dpcm) { 
             @supports (-webkit-appearance:none) {
                 .hero h1 {
@@ -649,7 +632,7 @@ if ($conn->connect_error) {
             }
         }
         
-        /* Ajustements pour les écrans mobiles */
+      
         @media (max-width: 768px) {
             .timeline::after {
                 left: 31px;
@@ -677,7 +660,7 @@ if ($conn->connect_error) {
     </style>
 </head>
 <body>
-    <!-- Navbar - fixée en haut pour une navigation facile -->
+   
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">HACHA LUXURY SCENT</a>
@@ -713,7 +696,7 @@ if ($conn->connect_error) {
         </div>
     </nav>
     
-    <!-- Hero Section - première impression importante -->
+  
     <section class="hero">
         <div class="container hero-content">
             <h1 data-aos="fade-up">Notre Histoire de Luxe</h1>
@@ -722,7 +705,6 @@ if ($conn->connect_error) {
         </div>
     </section>
     
-    <!-- About Section - notre histoire et nos valeurs -->
     <section id="notre-histoire" class="about-section">
         <div class="container">
             <div class="row align-items-center mb-5">
@@ -765,8 +747,7 @@ if ($conn->connect_error) {
             </div>
         </div>
     </section>
-    
-    <!-- Notre section signature - ajout personnel -->
+
     <section class="signature-section">
         <div class="signature-bg"></div>
         <div class="container">
@@ -799,7 +780,7 @@ if ($conn->connect_error) {
         </div>
     </section>
     
-    <!-- Timeline Section - notre parcours -->
+  
     <section class="timeline-section parallax" style="background-image: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.8)), url('https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-4.0.3');">
         <div class="container text-center mb-5">
             <h2 data-aos="fade-up" style="color: var(--secondary);">Notre Parcours</h2>
@@ -834,7 +815,7 @@ if ($conn->connect_error) {
         </div>
     </section>
     
-    <!-- Team Section - qui sommes-nous -->
+   
     <section class="team-section">
         <div class="container">
             <h2 class="text-center mb-5" data-aos="fade-up" style="color: var(--secondary);">Les Créatrices Passionnées</h2>
@@ -879,7 +860,7 @@ if ($conn->connect_error) {
         </div>
     </section>
     
-    <!-- Testimonials Section - ce que disent nos clients -->
+ 
     <section class="testimonial-section">
         <div class="container">
             <h2 class="text-center mb-5" data-aos="fade-up" style="color: var(--secondary);">Ce Que Disent Nos Clients</h2>
@@ -932,8 +913,7 @@ if ($conn->connect_error) {
             </div>
         </div>
     </section>
-    
-    <!-- Footer -->
+
     <footer id="contact">
         <div class="container">
             <div class="row">
@@ -984,18 +964,17 @@ if ($conn->connect_error) {
         </div>
     </footer>
     
-    <!-- Bouton retour en haut -->
     <div class="scroll-top">
         <i class="fas fa-arrow-up"></i>
     </div>
 
-    <!-- Bootstrap JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- AOS Animation Library -->
+ 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- Custom Scripts -->
+    
     <script>
         // Initialisation des animations AOS
         document.addEventListener('DOMContentLoaded', function() {
@@ -1022,8 +1001,7 @@ if ($conn->connect_error) {
                 scrollTopBtn.classList.remove('active');
             }
             
-            // Petit bug à corriger: sur certains mobiles le bouton disparaît trop vite
-            // Solution temporaire: ajouter un délai
+    
         });
         
         scrollTopBtn.addEventListener('click', function() {
@@ -1033,7 +1011,7 @@ if ($conn->connect_error) {
             });
         });
         
-        // Défilement fluide pour les liens d'ancrage
+       
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1043,7 +1021,7 @@ if ($conn->connect_error) {
                 
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    // Ajout d'un offset pour la navbar fixe
+                    
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
@@ -1051,8 +1029,7 @@ if ($conn->connect_error) {
                 }
             });
         });
-        
-        // Effet parallaxe - désactivé sur mobile pour les performances
+       
         if (window.innerWidth > 768) {
             window.addEventListener('scroll', function() {
                 const parallaxElements = document.querySelectorAll('.parallax');
@@ -1070,7 +1047,7 @@ if ($conn->connect_error) {
             });
         }
         
-        // Fonction pour vérifier si un élément est visible dans le viewport
+       
         function isInViewport(element) {
             const rect = element.getBoundingClientRect();
             return (
@@ -1079,7 +1056,7 @@ if ($conn->connect_error) {
             );
         }
         
-        // Animation des éléments au scroll
+       
         const fadeElements = document.querySelectorAll('.fade-up');
         
         function checkFade() {
@@ -1090,7 +1067,7 @@ if ($conn->connect_error) {
             });
         }
         
-        // Vérifier au chargement et au scroll
+     
         window.addEventListener('load', checkFade);
         window.addEventListener('scroll', checkFade);
     </script>
@@ -1098,8 +1075,7 @@ if ($conn->connect_error) {
 </html>
 
 <?php
-// Fermer la connexion à la base de données si elle existe
-if (isset($conn) && $conn) {
+// Fermer la connexion à la base de données//
     $conn->close();
 }
 ?>
