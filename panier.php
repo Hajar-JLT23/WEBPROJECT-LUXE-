@@ -1,23 +1,23 @@
 <?php
-// Démarrer la session pour gérer le panier
+
 session_start();
 
-// Initialiser le panier s'il n'existe pas
+
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
 // Connexion à la base de données
 $servername = "localhost";
-$username = "root"; // Généralement "root" en local
-$password = "123ML@#jklhhh"; // Souvent vide en local
+$username = "root";
+$password = "";// ici faut mette son Mot de passe , puisque c'est un repostory public on a décidé de pas mettre notre mot de passe SQL vsible//
 $dbname = "hacha_luxury";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connexion échouée: " . $conn->connect_error);
 }
-// Traitement de la mise à jour des quantités
+
 if (isset($_POST['update_cart'])) {
     foreach ($_POST['quantite'] as $produit_id => $quantite) {
         $quantite = (int)$quantite;
@@ -27,27 +27,27 @@ if (isset($_POST['update_cart'])) {
             unset($_SESSION['panier'][$produit_id]);
         }
     }
-    // Rediriger pour éviter la soumission multiple du formulaire
+  
     header("Location: panier.php");
     exit();
 }
 
-// Traitement de la suppression d'un article
+
 if (isset($_GET['remove']) && isset($_SESSION['panier'][$_GET['remove']])) {
     unset($_SESSION['panier'][$_GET['remove']]);
-    // Rediriger pour éviter les problèmes de rafraîchissement
+    
     header("Location: panier.php");
     exit();
 }
 
-// Traitement du parfum personnalisé
+
 $parfum_personnalise = isset($_SESSION['parfum_personnalise']) ? $_SESSION['parfum_personnalise'] : null;
 
-// Récupérer les informations des produits dans le panier
+
 $produits_panier = [];
 $total_panier = 0;
 
-// Récupérer les produits standard du panier
+
 if (!empty($_SESSION['panier'])) {
     $produit_ids = array_keys($_SESSION['panier']);
     $ids_string = implode(',', $produit_ids);
@@ -65,38 +65,34 @@ if (!empty($_SESSION['panier'])) {
     }
 }
 
-// Ajouter le parfum personnalisé au total si présent
+// on ajoute le parfum personnalisé au total si présent
 if ($parfum_personnalise) {
     $total_panier += floatval($parfum_personnalise['prix']);
 }
-
 // Compter le nombre total d'articles dans le panier
 $nombre_articles = 0;
 foreach ($_SESSION['panier'] as $quantite) {
     $nombre_articles += $quantite;
 }
-// Ajouter le parfum personnalisé au compteur si présent
+
 if ($parfum_personnalise) {
     $nombre_articles += 1;
 }
 
-// Vider le panier
 if (isset($_POST['vider_panier'])) {
     $_SESSION['panier'] = [];
     if (isset($_SESSION['parfum_personnalise'])) {
         unset($_SESSION['parfum_personnalise']);
     }
-    // Rediriger pour éviter la soumission multiple du formulaire
+  
     header("Location: panier.php");
     exit();
 }
 
-// Traitement de la commande
+
 if (isset($_POST['commander'])) {
-    // Ici, vous pourriez ajouter le code pour enregistrer la commande dans la base de données
-    // et rediriger vers une page de paiement
-    
-    // Pour l'exemple, nous allons simplement rediriger vers une page de confirmation
+    // Ici, on peut ajouter le code pour enregistrer la commande dans la base de données et on redirige vers une page de paiement//
+    // on a pris cet example nous allons simplement rediriger vers une page de confirmation
     header("Location: confirmation.php");
     exit();
 }
@@ -109,26 +105,23 @@ if (isset($_POST['commander'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre Panier - HACHA LUXURY SCENT</title>
     
-    <!-- Polices Google -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- AOS Animation Library -->
+
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
-        /* Variables de couleurs - harmonisées avec les autres pages */
+       
         :root {
-            --primary: #1b2845; /* bleu nuit profond */
-            --secondary: #c9b037; /* or ancien */
-            --accent: #ffd700; /* or brillant pour les accents */
-            --dark-bg: #0a0a0a; /* presque noir pour le fond */
-            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); /* dégradé doré */
+            --primary: #1b2845; 
+            --secondary: #c9b037; 
+            --accent: #ffd700; 
+            --dark-bg: #0a0a0a; 
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); 
         }
 
         body {
@@ -143,7 +136,6 @@ if (isset($_POST['commander'])) {
             letter-spacing: 1px;
         }
 
-        /* Navbar - avec effet de verre comme sur les autres pages */
         .navbar {
             background: rgba(10, 10, 10, 0.8) !important;
             backdrop-filter: blur(10px);
@@ -188,7 +180,7 @@ if (isset($_POST['commander'])) {
             transform: translateY(-2px);
         }
 
-        /* Page header */
+       
         .page-header {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
                         url('https://images.unsplash.com/photo-1596203721435-99e556d3fbb2?ixlib=rb-4.0.3') no-repeat center center;
@@ -221,13 +213,12 @@ if (isset($_POST['commander'])) {
             display: inline-block;
         }
 
-        /* Section panier */
+        
         .cart-section {
             padding: 80px 0;
             position: relative;
         }
 
-        /* Motif marocain subtil en arrière-plan */
         .cart-section::before {
             content: '';
             position: absolute;
@@ -240,7 +231,7 @@ if (isset($_POST['commander'])) {
             z-index: 0;
         }
 
-        /* Tableau du panier */
+        
         .cart-table {
             background: rgba(27, 40, 69, 0.7);
             border-radius: 15px;
@@ -292,7 +283,7 @@ if (isset($_POST['commander'])) {
             font-weight: 600;
         }
 
-        /* Input de quantité */
+       
         .quantity-input {
             width: 70px;
             padding: 8px 12px;
@@ -309,7 +300,6 @@ if (isset($_POST['commander'])) {
             box-shadow: 0 0 10px rgba(201, 176, 55, 0.3);
         }
 
-        /* Bouton de suppression */
         .btn-remove {
             color: #e74c3c;
             background: transparent;
@@ -323,7 +313,7 @@ if (isset($_POST['commander'])) {
             transform: scale(1.1);
         }
 
-        /* Résumé du panier */
+       
         .cart-summary {
             background: rgba(27, 40, 69, 0.7);
             border-radius: 15px;
@@ -390,7 +380,7 @@ if (isset($_POST['commander'])) {
             color: var(--secondary);
         }
 
-        /* Boutons */
+     
         .btn-luxury {
             background: var(--gold-gradient);
             border: none;
@@ -425,7 +415,7 @@ if (isset($_POST['commander'])) {
             transform: translateY(-3px);
         }
 
-        /* Message panier vide */
+      
         .empty-cart {
             text-align: center;
             padding: 50px 0;
@@ -442,7 +432,7 @@ if (isset($_POST['commander'])) {
             margin-bottom: 20px;
         }
 
-        /* Parfum personnalisé */
+  
         .custom-perfume {
             background: rgba(27, 40, 69, 0.8);
             border-radius: 10px;
@@ -484,7 +474,6 @@ if (isset($_POST['commander'])) {
             font-size: 0.8rem;
         }
 
-        /* Footer */
         footer {
             background: var(--dark-bg);
             padding: 60px 0 30px;
@@ -522,7 +511,6 @@ if (isset($_POST['commander'])) {
             text-decoration: none;
         }
 
-        /* Social Icons */
         .social-links a {
             display: inline-block;
             width: 40px;
@@ -542,14 +530,13 @@ if (isset($_POST['commander'])) {
             transform: translateY(-5px);
         }
 
-        /* Copyright */
+       
         .copyright {
             margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .page-header h1 {
                 font-size: 2.5rem;
@@ -568,7 +555,6 @@ if (isset($_POST['commander'])) {
 </head>
 <body>
 
-<!-- Barre de navigation -->
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
         <a class="navbar-brand" href="indexi.php">HACHA LUXURY SCENT</a>
@@ -612,18 +598,18 @@ if (isset($_POST['commander'])) {
     </div>
 </nav>
 
-<!-- En-tête de page -->
+
 <header class="page-header">
     <div class="container">
         <h1 data-aos="fade-up">Votre Panier</h1>
     </div>
 </header>
 
-<!-- Section Panier -->
+
 <section class="cart-section">
     <div class="container">
         <?php if (empty($_SESSION['panier']) && !$parfum_personnalise): ?>
-            <!-- Panier vide -->
+        
             <div class="empty-cart" data-aos="fade-up">
                 <i class="fas fa-shopping-basket"></i>
                 <h3>Votre panier est vide</h3>
@@ -746,7 +732,6 @@ if (isset($_POST['commander'])) {
     </div>
 </section>
 
-<!-- Pied de page -->
 <footer class="bg-dark text-white py-5" id="contact">
     <div class="container">
         <div class="row">
@@ -786,17 +771,15 @@ if (isset($_POST['commander'])) {
     </div>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- AOS Animation Library -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-<!-- Animation Script -->
+
 <script>
-    // Initialisation des animations AOS
+   
     document.addEventListener('DOMContentLoaded', function() {
-        // Solution pour le bug Safari
+        
         setTimeout(function() {
             AOS.init({
                 duration: 800,
@@ -807,7 +790,6 @@ if (isset($_POST['commander'])) {
         }, 100);
     });
     
-    // Navbar scroll effect - change l'apparence au scroll
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
         if (window.scrollY > 50) {
@@ -822,7 +804,7 @@ if (isset($_POST['commander'])) {
 </html>
 
 <?php
-// Fermer la connexion à la base de données si elle existe
+// Fermer la connexion à la base de données 
 if (isset($conn) && $conn) {
     $conn->close();
 }
