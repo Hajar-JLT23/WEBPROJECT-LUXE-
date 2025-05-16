@@ -12,7 +12,7 @@ foreach ($_SESSION['panier'] as $quantite) {
 
 $servername = "localhost";
 $username = "root"; 
-$password = ""; //ici faut mettre son  mot de passe SQL , puisque ce repostory public on a décidé de pas mettre notre mot de passe SQL//
+$password = "123ML@jklhhh";
 $dbname = "hacha_luxury";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
